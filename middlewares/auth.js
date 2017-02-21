@@ -1,5 +1,5 @@
 var jwt       = require('jsonwebtoken'),
-    Client    = require('../src/models/Client'),
+    Client    = require('../src/models/Clients'),
     rn        = require('random-number'),
     hash      = require('hash-generator'),
     exports   = module.exports;
@@ -12,7 +12,7 @@ exports.isAuthenticated = function(req, res, next) {
 
   if(!headers){
     return res.status(400).json({
-      message: 'Erro de requisição'
+      message: 'Erro(s) de requisição'
     });
   }
 
@@ -20,11 +20,12 @@ exports.isAuthenticated = function(req, res, next) {
 
   if(bearer !== "bearer") {
     return res.status(400).json({
-      message: 'Erro de requisição'
+      message: 'Erro(s) de requisição'
     });
   }
 
   token = headers.split('Bearer').pop().trim();
+  
   Client.verifyToken(token, "cufFz2Y7q734w011c3fMgOmje2XN4SH6", function(err, decoded){
 
     if (err) {

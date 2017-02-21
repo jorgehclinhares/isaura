@@ -1,7 +1,9 @@
-var express = require('express'),
-    app = express(),
-    Loader = require("./src/libs/loader"),
-    Config = require("./config/config");
+var express     = require('express'),
+    app         = express(),
+    bodyParser  = require('body-parser'),
+    Loader      = require("./src/libs/loader"),
+    mongoose    = require('mongoose'),
+    Config      = require("./config/config");
 
 (function initApi() {
 
@@ -12,9 +14,8 @@ var express = require('express'),
     return;
   }
 
-  // Engine - View
-  app.set('views', __dirname + '/src/views');
-  app.set('view engine', 'pug');
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   // Load - Controllers
   var files = Loader.load(["controllers"]);
@@ -24,13 +25,22 @@ var express = require('express'),
       app.use(require(files[i][y]));
     }
   }
-
+  connectDB();
   // Start - App Service
   app.listen(config.port, startService);
 
 
 })();
 
+function connectDB() {
+  mongoose.connect('mongodb://localhost/isaura', function(err){
+    if(err) {
+      console.log("Não foi possível conectaro ao Banco de Dados");
+    } else{
+      console.log('Banco de Dados Online');
+    }
+  });
+}
 
 function startService() {
   console.log('Serviço Online');

@@ -54,18 +54,18 @@ exports.update = function(data, cb) {
   Client.findById(data._id, function(err, client){
 
       if(err || !client){
-        callback(true, err || client);
+        cb(true, err || client);
       } else {
 
-        if (client.token) {
-          client.token = client.token;
+        if (data.token) {
+          client.token = data.token;
         }
 
         client.save(function(err, client){
           if(err){
-            callback(true, err);
+            cb(true, err);
           } else {
-            callback(false, client);
+            cb(false, client);
           }
         });
 
@@ -89,7 +89,7 @@ exports.get = function(data, cb) {
     } else {
 
       if(!client){
-        cb(false);
+        cb(true);
       } else {
         cb(false, client);
       }

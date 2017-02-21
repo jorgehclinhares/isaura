@@ -93,56 +93,54 @@ exports.signup = function (req, res, next) {
 // Atualizar token
 exports.refreshToken = function (req, res, next) {
 
-  var data = req.body.data;
-  data._id  = req.params.id;
+  let data = req.body.data;
+  data._id  = req.params._id;
 
-  if(data && data.secret && data._id) {
+  if(!data && !data.secret || !data._id) {
+    return res.status(400).json({
+      message: 'Erro(s) de parâmetro(s)'
+    });
+  }
 
-    Client.pegar(data, function(err, client) {
+  Client.get(data, function(err, client) {
 
-      if (!client) {
-        return res.status(404).json({
-          message: 'Cliente não identificada'
-        });
-      }
+    if (!client) {
+      return res.status(404).json({
+        message: 'Cliente não identificada'
+      });
+    }
+
+    if (err) {
+      return res.status(500).json({
+        message: 'Erro Interno'
+      });
+    }
+
+    Client.generateToken(data, "cufFz2Y7q734w011c3fMgOmje2XN4SH6", function(err, token) {
 
       if (err) {
-        return res.status(500).json({
-          message: 'Erro Interno'
+        return res.status(202).json({
+          message: 'Credenciais inválidas'
         });
       }
 
-      Client.generateToken(data, "cufFz2Y7q734w011c3fMgOmje2XN4SH6", function(err, token) {
+      Client.update({ _id: client._id, token: token }, function (err, client) {
 
         if (err) {
-          return res.status(202).json({
-            message: 'Credenciais inválidas'
+          return res.status(500).json({
+            message: 'Erro Interno'
           });
         }
 
-        Client.update({ _id: client._id, token: token }, function (err, client) {
-
-          if (err) {
-            return res.status(500).json({
-              message: 'Erro Interno'
-            });
-          }
-
-          return res.status(200).json({
-            message: 'Token atualizado com sucesso',
-            damessagedos: this.client
-          });
-
+        return res.status(200).json({
+          message: 'Token atualizado com sucesso',
+          data: client
         });
 
       });
 
     });
 
-  } else {
-    res.status(400).json({
-      message: 'Erro de parâmetro(s)'
-    });
-  }
+  });
 
 }

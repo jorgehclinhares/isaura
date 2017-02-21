@@ -1,0 +1,29 @@
+{
+  "name": "isaura-ia",
+  "version": "1.0.0",
+  "description": "Serviço responsável por gerenciar assistentes pessoais",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorgehclinhares/isaura-ia.git"
+  },
+  "keywords": [
+    "ia",
+    "bot",
+    "personal",
+    "assistant"
+  ],
+  "author": "Jorge Linhares <jorgehclinhares@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorgehclinhares/isaura-ia/issues"
+  },
+  "homepage": "https://github.com/jorgehclinhares/isaura-ia#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "file-system": "^2.2.2"
+  }
+}

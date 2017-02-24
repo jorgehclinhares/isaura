@@ -1,9 +1,9 @@
-var express     = require('express'),
-    app         = express(),
-    bodyParser  = require('body-parser'),
-    Loader      = require("./src/libs/loader"),
-    mongoose    = require('mongoose'),
-    Config      = require("./config/config");
+const express     = require('express'),
+    app           = express(),
+    bodyParser    = require('body-parser'),
+    Filer         = require('./src/libs/filer'),
+    mongoose      = require('mongoose'),
+    Config        = require('./config/config');
 
 (function initApi() {
 
@@ -17,16 +17,16 @@ var express     = require('express'),
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  // Load - Controllers
-  var files = Loader.load(["controllers"]);
+  let files = Filer.load(["controllers"]);
 
-  for (var i = 0; i < files.length; i++) {
-    for (var y = 0; y < files[i].length; y++) {
+  for (let i = 0; i < files.length; i++) {
+    for (let y = 0; y < files[i].length; y++) {
       app.use(require(files[i][y]));
     }
   }
+
   connectDB();
-  // Start - App Service
+
   app.listen(config.port, startService);
 
 

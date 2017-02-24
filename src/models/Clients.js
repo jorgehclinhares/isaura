@@ -33,9 +33,8 @@ exports.verifyToken = function(token, serviceSecret, cb) {
 };
 
 exports.signup = function(data, cb) {
-  
 
-  var client = new Client(data);
+  let client = new Client(data);
 
   client.save(function(err, client) {
 
@@ -53,23 +52,23 @@ exports.update = function(data, cb) {
 
   Client.findById(data._id, function(err, client){
 
-      if(err || !client){
-        cb(true, err || client);
-      } else {
+    if(err || !client){
+      cb(true, err || client);
+    } else {
 
-        if (data.token) {
-          client.token = data.token;
-        }
-
-        client.save(function(err, client){
-          if(err){
-            cb(true, err);
-          } else {
-            cb(false, client);
-          }
-        });
-
+      if (data.token) {
+        client.token = data.token;
       }
+
+      client.save(function(err, client){
+        if(err){
+          cb(true, err);
+        } else {
+          cb(false, client);
+        }
+      });
+
+    }
 
   });
 

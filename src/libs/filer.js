@@ -1,7 +1,8 @@
 var exports   = module.exports,
-    fs = require('file-system');
+    fs = require('file-system'),
+    addonsConfig  = require('../../addons/addons.json');
 
-function load(list) {
+exports.load = function load(list) {
 
   var list__files = [];
 
@@ -26,5 +27,3 @@ function readFiles(dir) {
   return files;
 
 };
-
-exports.load = load;

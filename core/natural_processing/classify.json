@@ -1,0 +1,7 @@
+{
+  "core" :  [
+    { "word": "qual o status dos meus projetos?", "classify": "statusProjects" },
+    { "word": "monitore os meus projetos", "classify": "statusProjects" },
+    { "word": "qual o status dos meus projetos?", "classify": "statusProjects" }
+  ]
+}

@@ -55,7 +55,7 @@ exports.main = function(query, cb) {
           }
 
           if(countRequests === _projects.length) {
-            cb(false, _projects);
+            return cb(false, _projects);
           }
 
         })

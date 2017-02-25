@@ -18,7 +18,6 @@ function processQuery (req, res) {
     }
 
     npl.init(query, function(err, data) {
-      // nothing
       return res.status(200).json({
         data: data
       });

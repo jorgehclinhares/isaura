@@ -1,9 +1,9 @@
 {
   "modules": [
     {
-      "name": "serviceStatus",
+      "name": "statusProjects",
       "version": "1.0.0",
-      "main": "serviceStatus"
+      "main": "statusProjects"
     }
   ]
 }

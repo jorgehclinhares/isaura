@@ -17,6 +17,15 @@ const express     = require('express'),
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
+  // TODO
+  app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+  });
+
   let files = Filer.load(["controllers"]);
 
   for (let i = 0; i < files.length; i++) {

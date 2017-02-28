@@ -4,9 +4,9 @@ var exports     = module.exports,
     EvEmitter   = require('events'),
     addons      = require('../../addons/addons.json');
 
-const Emitter = new EvEmitter();
-
 exports.init = function(query, cb) {
+
+  const Emitter = new EvEmitter();
 
   let classify  = Classifier.classify(query);
   let modules   = addons.modules;

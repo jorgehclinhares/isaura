@@ -1,6 +1,5 @@
 var exports = module.exports,
-    request = require('request'),
-    async   = require('async'),
+    request = require('sync-request'),
     npl     = require('../../core/natural_processing'),
     Project = require('../../src/models/Project');
 
@@ -42,32 +41,11 @@ exports.main = function(query, cb) {
       all: true
     }, function(err, projects) {
   
-      let urls = [];
-      let _projects = [];
-
       for(let i = 0; i < projects.length; i++) {
-        urls.push(projects[i].url);
+        projects[i].statusCode = request('GET', projects[i].url).statusCode;
       }
 
-      async.eachSeries(urls, function (url, next) {
-        request(url, function (err, res, body) {
-          if(res) {
-            _projects.push({
-              url: url,
-              statusCode: res.statusCode
-            });
-          } else {
-            _projects.push({
-              url: url,
-              statusCode: 404
-            });
-          }
-          
-          next();
-        })
-      }, function(err) {
-        return cb(false, _projects);
-      });
+      return cb(false, projects);
 
     }); 
 

@@ -16,10 +16,14 @@ exports.registry = function(data, cb) {
   project.save(function(err, project) {
 
     if(err) {
-      cb(true, err);
+      cb(true, {
+        type: "projects",
+        deleted: false
+      });
     } else {
 
       let _project = {
+        added: true,
         type: "projects",
         _id: project._id,
         url: project.url
@@ -91,10 +95,16 @@ exports.delete = function(id, cb) {
   Project.remove({ '_id' : id }, function (err, project) {
 
     if (err) {
-      cb(true, {});
+      cb(true, {
+        type: "projects",
+        deleted: false
+      });
     } else {
       cb(false, {
-        deleted: true
+        deleted: true,
+        type: "projects",
+        _id: project._id,
+        url: project.url
       });
     }
 

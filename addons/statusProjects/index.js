@@ -27,7 +27,6 @@ exports.main = function(query, cb) {
     Project.find({
       url: _query[2]
     }, function(err, project) {
-      
 
       if(err || project == "") return cb(true, {});
       Project.delete(project._id, cb);

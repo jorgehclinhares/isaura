@@ -1,8 +1,6 @@
-var exports   = module.exports,
-    fs = require('file-system'),
-    addonsConfig  = require('../../addons/addons.json');
+const fs = require('file-system');
 
-exports.load = function load(list) {
+module.exports.load = function load(list) {
 
   var list__files = [];
 

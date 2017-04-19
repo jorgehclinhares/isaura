@@ -1,56 +1,76 @@
-const express     = require('express'),
-    app           = express(),
-    bodyParser    = require('body-parser'),
-    Filer         = require('./src/libs/filer'),
-    mongoose      = require('mongoose'),
-    Config        = require('./config/config');
+// Modules
+const express       = require('express'),
+      app           = express(),
+      bodyParser    = require('body-parser'),
+      mongoose      = require('mongoose');
 
-(function initApi() {
+// Libs
+const Filer         = require('./src/libs/filer'),
+      Env           = require('./config/envroiment');
 
-  const config = Config.env();
+(function initApi () {
 
-  if(!config || config == ""){
-    console.log("# Ambiente não setado");
-    return;
+  let env = Env.get();
+
+  if (Object.keys(env).length == 0) {
+    return console.log("Ambiente não foi determinado.");
   }
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use( bodyParser.json() );
+  app.use( bodyParser.urlencoded({ extended: true }) );
+ 
+  connectDatabase();
 
-  // TODO
-  app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
+  loadControllers();
+
+  app.listen(env.port, (err) => {
+    if(err)  return console.log(`${new Date()} | Serviço não disponível`);
+    console.log(`${new Date()} | Servidor disponível ${env.host}:${env.port}`);
   });
 
-  let files = Filer.load(["controllers"]);
-
-  for (let i = 0; i < files.length; i++) {
-    for (let y = 0; y < files[i].length; y++) {
-      app.use(require(files[i][y]));
-    }
-  }
-
-  connectDB();
-
-  app.listen(config.port, startService);
-
+  app.use(logErrors);
+  app.use(errorHandler);
 
 })();
 
-function connectDB() {
-  mongoose.connect('mongodb://localhost/isaura', function(err){
-    if(err) {
-      console.log("Não foi possível conectaro ao Banco de Dados");
-    } else{
-      console.log('Banco de Dados Online');
+function loadControllers () {
+
+  try { 
+
+    let controllers = Filer.load( [ "controllers" ] );
+
+    for (let i = 0; i < controllers.length; i++) {
+      for (let y = 0; y < controllers[i].length; y++) {
+        app.use(require(controllers[i][y]));
+      }
     }
-  });
+  } catch (err) {
+    console.error(`${new Date()} | ERR: `, err);
+  }
+  
 }
 
-function startService() {
-  console.log('Serviço Online');
+function logErrors(err, req, res, next) {
+
+  console.error(`${new Date()} | ERR: `, err.stack || err);
+  next(err);
+}
+
+function errorHandler (err, req, res, next) {
+
+  if (typeof err == "string") {
+    if (err == "broken_contract") {
+      return res.status(401).send({ error: 'Contrato invlálido ou quebrado' });
+    } 
+  }
+
+  res.status(500).send({ error: 'Erro interno' });
+  
+}
+
+function connectDatabase() {
+  mongoose.connect('mongodb://localhost/isaura', (err) => {
+    if(err) next(err);
+    console.log(`${new Date()} | Banco de dados disponível`);
+  });
 }

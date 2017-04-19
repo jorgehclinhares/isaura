@@ -1,8 +1,7 @@
-var envDev    = require('./env.development.json'),
-    envProd   = require('./env.production.json'),
-    exports   = module.exports;
+var envDev    = require('./env.development'),
+    envProd   = require('./env.production');
 
-exports.env = function(){
+module.exports.get = () => {
 
   switch(process.env.NODE_ENV) {
 

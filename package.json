@@ -33,7 +33,7 @@
     "mongoose": "^4.8.4",
     "natural": "^0.5.0",
     "random-number": "0.0.7",
-    "request": "^2.79.0",
+    "request": "^2.81.0",
     "snowball-stemmer.jsx": "^0.2.3",
     "sync-request": "^4.0.1"
   }

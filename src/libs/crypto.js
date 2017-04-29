@@ -1,8 +1,6 @@
-const crypto      = require('crypto'),
-      createHash  = require('hash-generator'),
-      hash        = createHash('sha224');
+const crypto      = require('crypto');
 
-module.exports.cipher = (data, secret, algoritm, next) => {
+module.exports.cipher = (data, secret, algoritm) => {
 
   try {
 
@@ -11,15 +9,18 @@ module.exports.cipher = (data, secret, algoritm, next) => {
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
 
-    return encrypted;
+    return {
+      err: false,
+      hash: encrypted
+    };
 
   } catch (err) {
-    next (err);
+    return { err: true };
   }
 
 }
 
-module.exports.decipher = (data, secret, algoritm, next) => {
+module.exports.decipher = (data, secret, algoritm) => {
 
   try {
 
@@ -27,26 +28,13 @@ module.exports.decipher = (data, secret, algoritm, next) => {
     let decrypted = decipher.update(data, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
 
-    return decrypted;
+    return {
+      err: false,
+      decrypted: decrypted
+    };
 
   } catch (err) {
-    next (err);
+    return { err: true }
   }
 
 }
-
-module.exports.hash = (length, next) => {
-
-  try {
-    return createHash(length);
-  } catch (err) {
-    next(err);
-  }
-
-}
-
-module.exports.hash2 = (data) => {
-  return crypto.createHash('md5').update(data).digest("hex");
-}
-
-

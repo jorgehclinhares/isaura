@@ -1,27 +1,23 @@
-// Modules
-const express         = require('express'),
-      router          = express.Router();
-
+// Config
+const Env             = require('../../config/envroiment');
 // Models
+const University      = require('../models/University');
+// Libs
+const Crypto          = require('../libs/crypto');
 
-const Profile         = require('../models/Profile');
+module.exports.getKey = (req, res, next) => {
 
-// Endpoints
-router.get('/profile',
-  getProfileData
-);
+  let env = Env.get();
+  let crypto = Crypto.cipher("ISAURA", env.crypto.secret, env.crypto.algoritm);
 
-// Callbacks
-function getProfileData (req, res, next) {
-  Profile.get()
-    .then((profile) => {
-      res.status(200).send({
-        profile: profile
-      });
-    })
-    .catch((err) => {
-      next(err);
+  if (crypto.err) {
+    res.status(500).send({
+      "error": "Erro interno",
     });
-}
+  }
 
-module.exports = router;
+  res.status(200).send({
+    "userKey": crypto.hash
+  });
+    
+}

@@ -1,30 +1,20 @@
 const mongoose  = require('mongoose');
 
-const ConstraintSchema = new mongoose.Schema({
-  required: {
-    params:   mongoose.Schema.Types.Mixed,
-    headers:  mongoose.Schema.Types.Mixed,
-    body:     mongoose.Schema.Types.Mixed,
-    query:    mongoose.Schema.Types.Mixed
-  }
-});
-
 const RelationshipSchema = new mongoose.Schema({
-  name:         { type: String, unique: true },
-  key:          { type: String, unique: true },
-  request: { 
-    method:     { type: String, uppercase: true },
-    endpoint:   { type: String }
-  },
-  expire:       { type: Date },
-  contracts:    [ ConstraintSchema ]
+  key: { type: String },
+  name:  { type: String },
+  detail: { type: String },
+  constraints: [ {  name: String, description: String } ],
+  expire: { type: Date },
+  input: { /* JSON */ },
+  output: { /* JSON */ }
 });
 
 const Relationship =  mongoose.model('Relationship', RelationshipSchema);
 
 module.exports.register = (data) => {
 
-  let relationship = new Relation (data);
+  let relationship = new Relationship (data);
 
   return new Promise ((resolve, reject) => {
    
@@ -37,12 +27,12 @@ module.exports.register = (data) => {
 
 };
 
-module.exports.getAll = () => {
+module.exports.getByKey = (key) => {
 
   return new Promise ((resolve, reject) => {
-    Relation.find({}, '_id request token constraints' , (err, relationships) => {
+    Relationship.findOne({ key: key }, (err, relationship) => {
       if (err) return reject (err);
-      return resolve (relationships);
+      resolve (relationship);
     });
   });
 

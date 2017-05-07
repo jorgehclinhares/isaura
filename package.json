@@ -23,18 +23,11 @@
   },
   "homepage": "https://github.com/jorgehclinhares/isaura-ia#readme",
   "dependencies": {
-    "async": "^2.1.5",
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
     "file-system": "^2.2.2",
-    "hash-generator": "^0.1.0",
-    "jsonwebtoken": "^7.3.0",
     "keyword-extractor": "0.0.13",
     "mongoose": "^4.8.4",
-    "natural": "^0.5.0",
-    "random-number": "0.0.7",
-    "request": "^2.81.0",
-    "snowball-stemmer.jsx": "^0.2.3",
-    "sync-request": "^4.0.1"
+    "request": "^2.81.0"
   }
 }

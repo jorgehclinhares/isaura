@@ -37,7 +37,7 @@ function loadControllers () {
 
   try { 
 
-    let controllers = Filer.load( [ "controllers" ] );
+    let controllers = Filer.load( [ "routes" ] );
 
     for (let i = 0; i < controllers.length; i++) {
       for (let y = 0; y < controllers[i].length; y++) {

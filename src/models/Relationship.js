@@ -2,6 +2,8 @@ const mongoose  = require('mongoose');
 
 const RelationshipSchema = new mongoose.Schema({
   key: { type: String },
+  host: { type: String },
+  method: { type: String },
   name:  { type: String },
   detail: { type: String },
   constraints: [ {  name: String, description: String } ],
@@ -31,6 +33,17 @@ module.exports.getByKey = (key) => {
 
   return new Promise ((resolve, reject) => {
     Relationship.findOne({ key: key }, (err, relationship) => {
+      if (err) return reject (err);
+      resolve (relationship);
+    });
+  });
+
+};
+
+module.exports.getAll = () => {
+
+  return new Promise ((resolve, reject) => {
+    Relationship.find({}, (err, relationship) => {
       if (err) return reject (err);
       resolve (relationship);
     });

@@ -1,23 +1,29 @@
-// Config
-const Env             = require('../../config/envroiment');
-// Models
-const University      = require('../models/University');
-// Libs
-const Crypto          = require('../libs/crypto');
 
-module.exports.getKey = (req, res, next) => {
+const Relationship = require('../models/Relationship'),
+Crypto = require('../libs/crypto'),
+Env = require('../../config/envroiment.js');
 
-  let env = Env.get();
-  let crypto = Crypto.cipher("ISAURA", env.crypto.secret, env.crypto.algoritm);
+module.exports.me = (req, res, next) => {
 
-  if (crypto.err) {
-    res.status(500).send({
-      "error": "Erro interno",
-    });
-  }
+  Relationship.getAll()
+    .then((relationships) => {
 
-  res.status(200).send({
-    "userKey": crypto.hash
-  });
-    
+      let env = Env.get();
+      let crypto = Crypto.cipher("ISAURA/JORGEHCLINHARES", env.crypto.secret, env.crypto.algoritm);
+
+      if (crypto.err) {
+        res.status(500).send({
+          "error": "Desculpe, estamos com um problema interno!",
+        });
+      }
+
+      res.status(200).send({
+        "message": "Eu sou uma máquina social e represento um aluno.",
+        "key": crypto.hash,
+        "relationships": relationships
+      });
+
+    })
+    .catch((err) => next(err));
+
 }
